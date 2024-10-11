@@ -35,7 +35,6 @@
 <script setup>
 import { ref, reactive, onMounted, getCurrentInstance } from 'vue'
 import Cookies from "js-cookie"
-import axios from 'axios'
 
 const { proxy } = getCurrentInstance()
 
@@ -84,24 +83,29 @@ function login() {
     // })
 
     proxy.$api.login.login(userInfo).then((res) => {
-        console.log("res(then): " + res)
-        if (res.msg != null) {
-            // proxy.$message({
-            //     message: res.msg,
-            //     type: 'error'
-            // })
-        } else {
+        console.log(res);
+        if (res.code == 200) {
+            proxy.$message({
+                message: res.msg,
+                type: 'success'
+            })
+
             Cookies.set('token', res.data.token)
             sessionStorage.setItem('user', userInfo.account)
             proxy.$router.push('/')
+        } else {
+            proxy.$message({
+                message: res.msg,
+                type: 'error'
+            })
         }
         loading.value = false
     }).catch((res) => {
         console.log("res(catch): " + res)
-        // proxy.$message({
-        //     message: res.message,
-        //     type: 'error'
-        // })
+        proxy.$message({
+            message: res.message,
+            type: 'error'
+        })
         loading.value = false
     })
 }
