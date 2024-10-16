@@ -5,9 +5,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { getCurrentInstance, onMounted, ref, watch } from 'vue'
+import { version } from 'element-plus/package.json'
+import { ElMessage } from 'element-plus';
 
-const version = require('element-plus/package.json').version
 const ORIGINAL_THEME = '#409EFF'
 
 const props = defineProps({
@@ -29,15 +30,64 @@ const showSuccess = ref(true)
 
 onMounted(() => {
     if (props.default != null) {
-        theme = props.default
+        theme.value = props.default
         emit('onThemeChange', theme.value)
         showSuccess.value = false
     }
 })
 
 watch(theme, (val, oldVal) => {
-    if (typeof val != 'string') return;
+    if (typeof val !== 'string') return;
 
+    // 替换 CSS 样式，修改主题色
+    const themeCluster = getThemeCluster(val.replace('#', ''));
+    const originalCluster = getThemeCluster(oldVal.replace('#', ''));
+
+    const getHandler = (variable, id) => {
+        return () => {
+            const originalCluster = getThemeCluster(ORIGINAL_THEME.replace('#', ''));
+            const newStyle = updateStyle(chalk.value, originalCluster, themeCluster);
+
+            let styleTag = document.getElementById(id);
+            if (!styleTag) {
+                styleTag = document.createElement('style');
+                styleTag.setAttribute('id', id);
+                document.head.appendChild(styleTag);
+            }
+            styleTag.innerText = newStyle;
+        };
+    };
+
+    const chalkHandler = getHandler('chalk', 'chalk-style');
+    if (!chalk.value) {
+        const url = `https://unpkg.com/element-plus@latest/lib/theme-chalk/index.css`;
+        getCSSString(url, chalkHandler, 'chalk');
+    } else {
+        chalkHandler();
+    }
+
+    const styles = [...document.querySelectorAll('style')]
+        .filter(style => {
+            const text = style.innerText;
+            return new RegExp(oldVal, 'i').test(text) && !/Chalk Variables/.test(text);
+        });
+
+    styles.forEach(style => {
+        const { innerText } = style;
+        if (typeof innerText !== 'string') return;
+        style.innerText = updateStyle(innerText, originalCluster, themeCluster);
+    });
+
+    // 响应外部操作
+    emit('onThemeChange', val);
+    if (showSuccess.value) {
+        ElMessage({
+            type: 'success',
+            message: '换肤成功'
+        });
+    } else {
+        showSuccess.value = true;
+    }
 })
 
 // functions
@@ -109,4 +159,12 @@ const getThemeCluster = (theme) => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.theme-picker .el-color-picker__trigger {
+    vertical-align: middle;
+}
+
+.theme-picker-dropdown .el-color-dropdown__link-btn {
+    display: none;
+}
+</style>
