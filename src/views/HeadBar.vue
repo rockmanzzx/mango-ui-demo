@@ -31,19 +31,25 @@
                     </theme-picker>
                 </el-menu-item>
                 <!-- 语言切换 -->
-                <el-menu-item index="2">
-                    <li style="color: #fff;" class="fa fa-language fa-lg" v-popover:popover-lang></li>
-                    <el-popover ref="popover-lang" placement="bottom-start" trigger="click" v-model="langVisible">
-                        <div class="lang-item" @click="changeLanguage('zh_cn')">简体中文</div>
-                        <div class="lang-item" @click="changeLanguage('en_us')">English</div>
+                <el-menu-item index="2" ref="langItemRef">
+                    <li style="color: #fff;" class="fa fa-language fa-lg"></li>
+                    <el-popover ref="langPopoverRef" placement="bottom-start" trigger="click" v-model="langVisible"
+                        :virtual-ref="langItemRef" virtual-triggering>
+                        <div class="lang-item" @click="changeLanguage('zh')">简体中文</div>
+                        <div class="lang-item" @click="changeLanguage('en')">English</div>
                     </el-popover>
                 </el-menu-item>
                 <!-- 用户信息 -->
-                <el-menu-item index="3">
-                    <span class="user-info">
-                        <img :src=user.avatar alt="">{{ user.name }}
-                    </span>
-                </el-menu-item>
+                <el-popover ref="userInfoPopover" trigger="click" :show-arrow="false" placement="bottom-end">
+                    <personal-panel :user="user"></personal-panel>
+                    <template #reference>
+                        <el-menu-item index="3">
+                            <span class="user-info">
+                                <img :src=user.avatar alt="">{{ user.name }}
+                            </span>
+                        </el-menu-item>
+                    </template>
+                </el-popover>
             </el-menu>
         </span>
     </div>
@@ -55,8 +61,13 @@ import userAvatar from '@/assets/user.png'
 import { mapState, useStore } from "vuex";
 import Hamburger from '@/components/Hamburger/index.vue'
 import ThemePicker from '@/components/ThemePicker/index.vue'
+import PersonalPanel from '@/views/Core/PersonalPanel.vue';
 
-const proxy = getCurrentInstance();
+const { proxy } = getCurrentInstance();
+
+const langPopoverRef = ref();
+const langItemRef = ref();
+const userInfoPopover = ref();
 
 const user = ref({
     name: "Louis",
@@ -88,8 +99,9 @@ function onThemeChange(themeColor) {
 }
 
 function changeLanguage(lang) {
-    lang === '' ? 'zh_cn' : lang;
+    lang === '' ? 'zh' : lang;
     proxy.$i18n.locale = lang;
+    localStorage.setItem("language", lang);
     langVisible.value = false;
 }
 
@@ -101,6 +113,9 @@ onMounted(() => {
     }
 })
 
+setTimeout(() => {
+    userInfoPopover.value.popperRef.popperInstanceRef.forceUpdate();
+}, 1000)
 
 </script>
 

@@ -1,10 +1,11 @@
 <script setup>
-
+import PersonalPanel from '@/views/Core/PersonalPanel.vue';
 </script>
 
 <template>
   <div id="app">
     <router-view></router-view>
+     <!-- <personal-panel></personal-panel> -->
   </div>
 </template>
 

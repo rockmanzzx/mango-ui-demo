@@ -13,5 +13,11 @@ import MainContent from "./MainContent.vue";
 </script>
 
 <style lang="scss" scoped>
-
+.container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
 </style>
