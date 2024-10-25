@@ -39,11 +39,22 @@
                         <div class="lang-item" @click="changeLanguage('en')">English</div>
                     </el-popover>
                 </el-menu-item>
-                <!-- 用户信息 -->
-                <el-popover ref="userInfoPopover" trigger="click" :show-arrow="false" placement="bottom-end">
-                    <personal-panel :user="user"></personal-panel>
+                <!-- 系统通知 -->
+                <el-popover ref="noticePopover" trigger="click" :show-arrow="false" placement="auto" width="250">
+                    <notice-panel></notice-panel>
                     <template #reference>
                         <el-menu-item index="3">
+                            <el-badge :value="4" :max="99" class="badge" type="error" :offset="[5, 15]">
+                                <li style="color:#fff;" class="fa fa-bell-o fa-lg"></li>
+                            </el-badge>
+                        </el-menu-item>
+                    </template>
+                </el-popover>
+                <!-- 用户信息 -->
+                <el-popover ref="userInfoPopover" trigger="click" :show-arrow="false" placement="auto" width="280">
+                    <personal-panel :user="user"></personal-panel>
+                    <template #reference>
+                        <el-menu-item index="4">
                             <span class="user-info">
                                 <img :src=user.avatar alt="">{{ user.name }}
                             </span>
@@ -59,9 +70,12 @@
 import { computed, getCurrentInstance, onMounted, ref } from "vue";
 import userAvatar from '@/assets/user.png'
 import { mapState, useStore } from "vuex";
+
 import Hamburger from '@/components/Hamburger/index.vue'
 import ThemePicker from '@/components/ThemePicker/index.vue'
+
 import PersonalPanel from '@/views/Core/PersonalPanel.vue';
+import NoticePanel from "./Core/NoticePanel.vue";
 
 const { proxy } = getCurrentInstance();
 
@@ -115,6 +129,7 @@ onMounted(() => {
 
 setTimeout(() => {
     userInfoPopover.value.popperRef.popperInstanceRef.forceUpdate();
+    noticePopover.value.popperRef.popperInstanceRef.forceUpdate();
 }, 1000)
 
 </script>
