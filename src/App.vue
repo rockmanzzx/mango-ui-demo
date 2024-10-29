@@ -6,10 +6,10 @@ import MessagePanel from './views/Core/MessagePanel.vue';
 
 <template>
   <div id="app">
-    <!-- <router-view></router-view> -->
+    <router-view></router-view>
     <!-- <personal-panel></personal-panel> -->
     <!-- <notice-panel></notice-panel> -->
-    <message-panel></message-panel>
+    <!-- <message-panel></message-panel> -->
   </div>
 </template>
 

@@ -31,19 +31,31 @@
                     </theme-picker>
                 </el-menu-item>
                 <!-- 语言切换 -->
-                <el-menu-item index="2" ref="langItemRef">
-                    <li style="color: #fff;" class="fa fa-language fa-lg"></li>
-                    <el-popover ref="langPopoverRef" placement="bottom-start" trigger="click" v-model="langVisible"
-                        :virtual-ref="langItemRef" virtual-triggering>
-                        <div class="lang-item" @click="changeLanguage('zh')">简体中文</div>
-                        <div class="lang-item" @click="changeLanguage('en')">English</div>
-                    </el-popover>
-                </el-menu-item>
-                <!-- 系统通知 -->
-                <el-popover ref="noticePopover" trigger="click" :show-arrow="false" placement="auto" width="250">
-                    <notice-panel></notice-panel>
+                <el-popover trigger="click" v-model="langVisible">
+                    <div class="lang-item" @click="changeLanguage('zh')">简体中文</div>
+                    <div class="lang-item" @click="changeLanguage('en')">English</div>
+                    <template #reference>
+                        <el-menu-item index="2" ref="langItemRef">
+                            <li style="color: #fff;" class="fa fa-language fa-lg"></li>
+                        </el-menu-item>
+                    </template>
+                </el-popover>
+                <!-- 我的私信 -->
+                <el-popover trigger="click" :show-arrow="false" placement="auto" width="300">
+                    <message-panel></message-panel>
                     <template #reference>
                         <el-menu-item index="3">
+                            <el-badge :value="5" :max="99" class="badge" type="error" :offset="[5, 15]">
+                                <li style="color:#fff;" class="fa fa-envelope-o fa-lg"></li>
+                            </el-badge>
+                        </el-menu-item>
+                    </template>
+                </el-popover>
+                <!-- 系统通知 -->
+                <el-popover trigger="click" :show-arrow="false" placement="auto" width="250">
+                    <notice-panel></notice-panel>
+                    <template #reference>
+                        <el-menu-item index="4">
                             <el-badge :value="4" :max="99" class="badge" type="error" :offset="[5, 15]">
                                 <li style="color:#fff;" class="fa fa-bell-o fa-lg"></li>
                             </el-badge>
@@ -51,10 +63,10 @@
                     </template>
                 </el-popover>
                 <!-- 用户信息 -->
-                <el-popover ref="userInfoPopover" trigger="click" :show-arrow="false" placement="auto" width="280">
+                <el-popover trigger="click" :show-arrow="false" placement="auto" width="280">
                     <personal-panel :user="user"></personal-panel>
                     <template #reference>
-                        <el-menu-item index="4">
+                        <el-menu-item index="5">
                             <span class="user-info">
                                 <img :src=user.avatar alt="">{{ user.name }}
                             </span>
@@ -76,12 +88,9 @@ import ThemePicker from '@/components/ThemePicker/index.vue'
 
 import PersonalPanel from '@/views/Core/PersonalPanel.vue';
 import NoticePanel from "./Core/NoticePanel.vue";
+import MessagePanel from "./Core/MessagePanel.vue"
 
 const { proxy } = getCurrentInstance();
-
-const langPopoverRef = ref();
-const langItemRef = ref();
-const userInfoPopover = ref();
 
 const user = ref({
     name: "Louis",
@@ -126,11 +135,6 @@ onMounted(() => {
         user.value.avatar = userAvatar;
     }
 })
-
-setTimeout(() => {
-    userInfoPopover.value.popperRef.popperInstanceRef.forceUpdate();
-    noticePopover.value.popperRef.popperInstanceRef.forceUpdate();
-}, 1000)
 
 </script>
 

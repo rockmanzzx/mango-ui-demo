@@ -92,8 +92,7 @@ function handleClick() {
             border-color: rgba(180, 190, 190, 0.8);
             border-top-width: 1px;
             border-top-style: solid;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding: 10px;
         }
         .message-item:hover {
             cursor: pointer;
