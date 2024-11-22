@@ -63,24 +63,6 @@ function login() {
         password: loginForm.password,
         captcha: loginForm.captcha
     }
-    console.log("userInfo: " + JSON.stringify(userInfo))
-    // axios.post(proxy.$global.baseUrl + '/login', userInfo).then((res) => {
-    //     console.log("res(then): " + JSON.stringify(res))
-    //     if (res.data.msg != null) {
-    //         // proxy.$message({
-    //         //     message: res.data.msg,
-    //         //     type: 'error'
-    //         // })
-    //     } else {
-    //         Cookies.set('token', res.data.token)
-    //         sessionStorage.setItem('user', userInfo.account)
-    //         proxy.$router.push('/')
-    //     }
-    //     loading.value = false
-    // }).catch((res) => {
-    //     console.log("res(catch): " + res)
-    //     loading.value = false
-    // })
 
     proxy.$api.login.login(userInfo).then((res) => {
         console.log(res);
@@ -92,6 +74,7 @@ function login() {
 
             Cookies.set('token', res.data.token)
             sessionStorage.setItem('user', userInfo.account)
+            proxy.$store.commit('menuRouteLoaded', false)
             proxy.$router.push('/')
         } else {
             proxy.$message({
