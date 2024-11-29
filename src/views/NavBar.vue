@@ -8,7 +8,22 @@
 </template>
 
 <script setup>
+import { useStore } from 'vuex';
 
+const store = useStore()
+
+const appName = computed(() => {
+    store.state.app.appName
+})
+const themeColor = computed(() => {
+    store.state.app.themeColor
+})
+const collapse = computed(() => {
+    store.state.app.collapse
+})
+const navTree = computed(() => {
+    store.state.menu.navTree
+})
 </script>
 
 <style lang="scss" scoped>

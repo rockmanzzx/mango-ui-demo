@@ -45,7 +45,7 @@
                     <message-panel></message-panel>
                     <template #reference>
                         <el-menu-item index="3">
-                            <el-badge :value="5" :max="99" class="badge" type="error" :offset="[5, 15]">
+                            <el-badge :value="5" :max="99" class="badge" type="danger" :offset="[5, 15]">
                                 <li style="color:#fff;" class="fa fa-envelope-o fa-lg"></li>
                             </el-badge>
                         </el-menu-item>
@@ -56,7 +56,7 @@
                     <notice-panel></notice-panel>
                     <template #reference>
                         <el-menu-item index="4">
-                            <el-badge :value="4" :max="99" class="badge" type="error" :offset="[5, 15]">
+                            <el-badge :value="4" :max="99" class="badge" type="danger" :offset="[5, 15]">
                                 <li style="color:#fff;" class="fa fa-bell-o fa-lg"></li>
                             </el-badge>
                         </el-menu-item>

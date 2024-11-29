@@ -32,7 +32,7 @@ export const findPage = (data) => {
 export const findPermissions = (params) => {
     return axios({
         url: '/user/findPermissions',
-        method: 'get',
+        method: 'post',
         params
     })
 }

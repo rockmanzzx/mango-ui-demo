@@ -60,8 +60,8 @@ watch(theme, (val, oldVal) => {
 
     const chalkHandler = getHandler('chalk', 'chalk-style');
     if (!chalk.value) {
-        const url = `https://unpkg.com/element-plus@latest/lib/theme-chalk/index.css`;
-        getCSSString(url, chalkHandler, 'chalk');
+        // const url = `https://unpkg.com/element-plus@latest/lib/theme-chalk/index.css`;
+        // getCSSString(url, chalkHandler, 'chalk');
     } else {
         chalkHandler();
     }
