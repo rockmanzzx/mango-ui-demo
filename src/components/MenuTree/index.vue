@@ -1,19 +1,26 @@
 <template>
-    <el-submenu v-if="menu.children && menu.children.length >= 1" :index="'' + menu.id">
-        <template slot="title">
-            <i class="menu.icon"></i>
-            <span slot="title">{{ menu.name }}</span>
+    <el-sub-menu v-if="menu.children && menu.children.length >= 1" :index="String(menu.id)">
+        <template #title>
+            <el-icon><component :is="menu.icon" /></el-icon>
+            <span>{{ menu.name }}</span>
         </template>
-        <MenuTree v-for="item in menu.children" key="item.id" :menu="item"></MenuTree>
-    </el-submenu>
-    <el-menu-item v-else :index="'' + menu.id" @click="handleRoute(menu)">
-        <i :class="menu.icon"></i>
-        <span slot="title">{{ menu.name }}</span>
+        <MenuTree v-for="item in menu.children" :key="item.id" :menu="item" />
+    </el-sub-menu>
+    <el-menu-item v-else :index="String(menu.id)" @click="handleRoute(menu)">
+        <el-icon><component :is="menu.icon" /></el-icon>
+        <span>{{ menu.name }}</span>
     </el-menu-item>
 </template>
 
 <script setup>
-import router from '@/router';
+import { defineOptions } from 'vue'
+import { useRouter } from 'vue-router'
+
+defineOptions({
+    name: 'MenuTree'
+})
+
+const router = useRouter()
 
 const props = defineProps({
     menu: {
@@ -27,6 +34,4 @@ function handleRoute(menu) {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

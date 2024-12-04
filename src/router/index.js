@@ -119,7 +119,7 @@ function addDynamicRoutes(menuList = [], routes = []) {
             "/";
         }
         url = url.substring(0, url.length - 1);
-        route["component"] = (resolve) => require([`@/views/${url}`], resolve);
+        route["component"] = () => import(`../views/${url}.vue`)
       } catch (e) {
         console.log('addDynamicRoutes error: ' + e);
       }
