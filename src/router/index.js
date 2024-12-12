@@ -5,6 +5,8 @@ import Login from "@/views/Login.vue";
 import NotFound from "@/views/NotFound.vue";
 import store from "@/store";
 import api from "@/http/api";
+import Intro from "@/views/Intro/Intro.vue";
+import User from "@/views/Sys/User.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,6 +15,17 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: Home,
+      children: [
+        {
+          path: '',
+          name: '系统介绍',
+          component: Intro,
+          meta: {
+            icon: 'fa fa-home fa-lg',
+            index: 0,
+          }
+        }
+      ],
     },
     {
       path: "/login",
@@ -24,7 +37,11 @@ const router = createRouter({
       name: "notFound",
       component: NotFound,
     },
-
+    {
+      path: "/sys/user",
+      name: "User",
+      component: User,
+    },
     // {
     //   path: '/',
     //   name: 'home',
@@ -119,7 +136,7 @@ function addDynamicRoutes(menuList = [], routes = []) {
             "/";
         }
         url = url.substring(0, url.length - 1);
-        route["component"] = () => import(`../views/${url}.vue`)
+        //route["component"] = () => import(`@/views/${url}.vue`)
       } catch (e) {
         console.log('addDynamicRoutes error: ' + e);
       }

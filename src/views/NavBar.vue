@@ -15,12 +15,15 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, watch, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
 
 import MenuTree from '@/components/MenuTree/index.vue'
 
 const store = useStore()
+const route = useRoute()
+const router = useRouter()
 
 const appName = computed(() =>
     store.state.app.appName
@@ -34,7 +37,38 @@ const collapse = computed(() =>
 const navTree = computed(() =>
     store.state.menu.navTree
 )
+const mainTabs = computed({
+    get: () => store.state.app.mainTabs,
+    set: (value) => {
+        store.commit('updateMainTabs', value)
+    }
+})
+const mainTabsActiveName = computed({
+    get: () => store.state.app.mainTabsActiveName,
+    set: (value) => {
+        store.commit('updateMainTabsActiveName', value)
+    }
+})
 
+const handleRoute = () => {
+    if (!mainTabs.value) {
+        return;
+    }
+    let tab = mainTabs.value.filter(item => item.name === route.name)[0]
+    if (!tab) {
+        tab = {
+            name: route.name,
+            title: route.name,
+            icon: route.meta.icon,
+        }
+        mainTabs.value.push(tab)
+    }
+    mainTabsActiveName.value = tab.name
+    if (navMenu.value != null) {
+        navMenu.value.activeIndex = '' + route.meta.index
+        navMenu.value.initOpenedMenu()
+    }
+}
 const handleOpen = () => {
     console.log('handleOpen')
 }
@@ -44,6 +78,8 @@ const handleClose = () => {
 const handleSelect = (a, b) => {
     console.log('handleSelect')
 }
+
+watch(() => route, handleRoute, { immediate: true })
 </script>
 
 <style lang="scss" scoped>
